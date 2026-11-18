@@ -830,7 +830,7 @@ app.use('/ext/getsummary', function(req, res) {
                   difficulty: (difficulty == null || difficulty == '' ? '-' : difficulty),
                   difficultyHybrid: difficultyHybrid,
                   supply: new Decimal(stats == null || stats.supply == null ? '0' : stats.supply.toString()).toFixed(),
-                  hashrate: new Decimal(hashrate.toString()).toFixed(),
+                  hashrate: new Decimal(hashrate != null && !isNaN(Number(hashrate)) ? hashrate.toString() : '0').toFixed(), // DCG : chaine PoS, hashrate non numerique
                   lastPrice: new Decimal(stats == null || stats.last_price == null ? '0' : stats.last_price.toString()).toFixed(),
                   lastUSDPrice: new Decimal(stats == null || stats.last_usd_price == null ? '0' : stats.last_usd_price.toString()).toFixed(),
                   connections: (connections ? connections : '-'),
@@ -845,7 +845,7 @@ app.use('/ext/getsummary', function(req, res) {
                   send_data.lastPrice = lib.format_decimal_string(new Decimal(send_data.lastPrice.toString()), { minFractionDigits: 2, maxFractionDigits: 8 });
                   send_data.lastUSDPrice = lib.format_decimal_string(new Decimal(send_data.lastUSDPrice.toString()), { minFractionDigits: 2, maxFractionDigits: 8 });
                   send_data.supply = lib.format_decimal_string(new Decimal(new Decimal(send_data.supply.toString()).toFixed(0)), { minFractionDigits: 0, maxFractionDigits: 0 });
-                  send_data.hashrate = lib.format_decimal_string(new Decimal(hashrate.toString()), { minFractionDigits: 2, maxFractionDigits: 8 });
+                  send_data.hashrate = lib.format_decimal_string(new Decimal(send_data.hashrate), { minFractionDigits: 2, maxFractionDigits: 8 });
                 }
 
                 res.send(send_data);
